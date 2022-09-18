@@ -1,23 +1,24 @@
 import types
+import settings
+from classes import *
 
-from telebot import *
-import telebot
 import sqlite3
-
-bot = telebot.TeleBot('2042615065:AAGU34zVM5I8j3urafHXIrfZPy1hAGu4ir8')
-path = "for_bot.db"
+from telebot import *
 
 
-ADMINID = 393672035
+bot = telebot.TeleBot
+
 
 # Получение одного случайного анекдота из базы данных
 def getData() -> str:
     con = sqlite3.connect(path)
     cur = con.cursor()
-    res = cur.execute("SELECT * FROM anekdots LIMIT 1 OFFSET abs(random() % (select count(*) from anekdots));").fetchone()
+    res = cur.execute(
+        "SELECT * FROM anekdots LIMIT 1 OFFSET abs(random() % (select count(*) from anekdots));").fetchone()
     con.close()
     return res
-    
+
+
 # Добавление анекдота в базу данных
 def setData(data):
     con = sqlite3.connect(path)
@@ -53,6 +54,7 @@ def getTextForAdmin() -> str:
     con.close()
     return res
 
+
 # Добавление анекдота в таблицу для администрирования
 def addToAdmin(data):
     con = sqlite3.connect(path)
@@ -85,7 +87,8 @@ def addByAdmin(data):
     con.close()
     bot.send_message(user_id[0], "Ваш анекдот был успешно добавлен")
 
-# 
+
+#
 
 # Получение списка забаненых пользователей
 # def getBanList():
@@ -108,6 +111,7 @@ def banUser(user_id):
     con.commit()
     con.close()
 
+
 # Проверка пользователя на наличие в бан листе
 def checkBan(user_id) -> bool:
     con = sqlite3.connect(path)
@@ -117,6 +121,7 @@ def checkBan(user_id) -> bool:
     if (len(res) == 0):
         return False
     return True
+
 
 # Разблокирование пользователя
 def unbanUser(user_id):
@@ -141,10 +146,9 @@ def starting(message):
         bot.send_message(message.from_user.id, "Вы были забанены")
     else:
         addToList(message.from_user.id, message.from_user.username)
-        bot.send_message(message.from_user.id, f"Приветствую, {message.from_user.username}, самое время для разрывного анекдота? Для получения анекдота пишите /rzhaka или нажмите на кнопку внизу сообщения.\nЕсли желаете добавить анекдот в список, то просто отправьте его боту, админ проверит анекдот и бот отправит вам результат проверки.")
-        print(message.from_user, message.text, sep="\t")    
-
-    
+        bot.send_message(message.from_user.id,
+                         f"Приветствую, {message.from_user.username}, самое время для разрывного анекдота? Для получения анекдота пишите /rzhaka или нажмите на кнопку внизу сообщения.\nЕсли желаете добавить анекдот в список, то просто отправьте его боту, админ проверит анекдот и бот отправит вам результат проверки.")
+        print(message.from_user, message.text, sep="\t")
 
 
 @bot.message_handler(commands=['rzhaka'])
@@ -157,13 +161,13 @@ def send_anek(message):
         print(message.from_user, message.text, anekdot, sep="\t")
 
 
-
 @bot.message_handler(commands=['all'])
 def send_all(message):
     if (message.from_user.id == ADMINID):
         listForAll = getAll()
         for i in listForAll:
             bot.send_message(message.from_user.id, i)
+
 
 # @bot.message_handler(commands=['banlist'])
 # def check_ban_list(message):
@@ -179,7 +183,8 @@ def send_all(message):
 
 
 def check(text) -> bool:
-    if (text != "/ban" and text != "/unban" and text != "/tell" and text != "/start" and text != "/rzhaka" and text != "/all" and text != "/banlist" and text != "/admin" and text != ""):
+    if (
+            text != "/ban" and text != "/unban" and text != "/tell" and text != "/start" and text != "/rzhaka" and text != "/all" and text != "/banlist" and text != "/admin" and text != ""):
         return True
     return False
 
@@ -196,7 +201,6 @@ def check_admin_list(message):
             buttonFalse = types.InlineKeyboardButton(text="Не добавлять", callback_data="isFalse")
             keyboard.add(buttonTrue, buttonFalse, row_width=1)
             bot.send_message(message.from_user.id, getTextForAdmin(), reply_markup=keyboard)
-
 
 
 @bot.message_handler(content_types=['text'])
@@ -220,7 +224,7 @@ def write_anek(message):
         bot.send_message(int(parsedStr[1]), "Вы были разбанены со словами: " + messageToUser)
         unbanUser(int(parsedStr[1]))
 
-    if (message.from_user.id == ADMINID and check(parsedStr[0]) and check(message.text)):
+    if message.from_user.id == ADMINID and check(parsedStr[0]) and check(message.text):
         setData(message)
         print(message.from_user, message.text, sep="\t")
     if (message.from_user.id != ADMINID and check(parsedStr[0]) and check(message.text)):
@@ -231,17 +235,13 @@ def write_anek(message):
             print(message.from_user, message.text, sep="\t")
             bot.send_message(message.from_user.id, "Ваш анекдот на рассмотрении")
 
-@bot.callback_query_handler(func= lambda call: True)
+
+@bot.callback_query_handler(func=lambda call: True)
 def admin_choice(call):
     if (call.data == "isTrue"):
         addByAdmin(call.message)
     if (call.data == "isFalse"):
         deleteByAdmin(call.message)
-        
+
 
 bot.polling(non_stop=True, interval=0)
-
-
-# and parsedStr[0] != "/ban" and parsedStr[0] != "/unban" and parsedStr[0] != "/tell" and message.text != "/start" and message.text != "/rzhaka" and message.text != "/all" and message.text != "/banlist" and message.text != "/admin" and message.text != ""
-
-# 
