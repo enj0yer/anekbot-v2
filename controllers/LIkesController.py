@@ -11,8 +11,8 @@ class LikesController(Connection):
         super().__del__()
 
     def create_like(self, user: User, anekdot: Anekdot):
-        self._cursor.execute("insert into likes (user_id, anekdot_id) values (?, ?)", (user.get_user_id(), anekdot.get_anekdot_id(),))
+        self._cursor.execute("insert into likes (user_id, anekdot_id) values (?, ?)", (user.user_id, anekdot.anekdot_id,))
 
     def delete_like(self, user: User, anekdot: Anekdot):
-        self._cursor.execute("delete from likes where user_id = (?) and anekdot_id = (?)", (user.get_user_id(), anekdot.get_anekdot_id(),))
+        self._cursor.execute("delete from likes where user_id = (?) and anekdot_id = (?)", (user.user_id, anekdot.anekdot_id,))
 

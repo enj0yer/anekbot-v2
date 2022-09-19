@@ -10,11 +10,16 @@ class UsersController(Connection):
         super().__del__()
 
     def get_admins_list(self) -> list[User]:
-        result = self._cursor.execute("select * from users where is_admin = 1 or is_owner = 1").fetchall()
+        result = self._cursor.execute("select id, tg_id, username, first_name, last_name, is_owner, is_admin from users where is_admin = 1 or is_owner = 1").fetchall()
         admin_list = []
-
         for string in result:
-            admin_list.append(User(string[0], string[1], string[2], string[3], string[4], string[5]))
+            admin_list.append(User(user_id=string[0],
+                                   tg_id=string[1],
+                                   username=string[2],
+                                   first_name=string[3],
+                                   last_name=string[4],
+                                   is_owner=string[5],
+                                   is_admin=string[6]))
 
         return admin_list
 
