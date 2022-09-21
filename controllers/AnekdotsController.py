@@ -11,8 +11,8 @@ class AnekdotsController(Connection):
 
     def get_random_anekdot(self) -> Anekdot:
         result = self._cursor.execute(
-            "SELECT * from anekdots limit 1 offset abs(random() % (select count(*) from anekdots)) where on_review = 0;").fetchone()
-        return Anekdot(result[0], result[1], result[2], result[3], result[4])
+            "SELECT id, user_id, data, on_review from anekdots limit 1 offset abs(random() % (select count(*) from anekdots)) where on_review = 0;").fetchone()
+        return Anekdot(result[0], result[1], result[2], result[3])
 
     def change_review_state(self, anekdot: Anekdot, on_review: bool) -> None:
         """ONLY IN DATABASE"""
