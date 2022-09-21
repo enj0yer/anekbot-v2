@@ -1,5 +1,4 @@
 
-
 class User:
     def __init__(self, user_id: int = None, tg_id: int = None, username: str = None, first_name: str = None, last_name: str = None, is_owner: bool = False, is_admin: bool = False):
         self.__id = user_id
@@ -24,7 +23,6 @@ class User:
 
     @username.setter
     def username(self, new_username) -> None:
-        assert isinstance(new_username, str) and new_username is None, 'Parameter type must be str'
         self.__username = new_username
 
     @property
@@ -33,7 +31,6 @@ class User:
 
     @first_name.setter
     def first_name(self, new_first_name) -> None:
-        assert isinstance(new_first_name, str) and new_first_name is None, 'Parameter type must be str'
         self.__first_name = new_first_name
 
     @property
@@ -42,17 +39,15 @@ class User:
 
     @last_name.setter
     def last_name(self, new_last_name) -> None:
-        assert isinstance(new_last_name, str) or new_last_name is None, 'Parameter type must be str'
         self.__last_name = new_last_name
 
     @property
     def is_owner(self) -> bool:
         return self.__is_owner
 
-    @property
+    @is_owner.setter
     def is_owner(self, owner_state) -> None:
         """NOT FOR USAGE"""
-        assert isinstance(owner_state, bool), 'Parameter type must be bool'
         self.__is_owner = owner_state
 
     @property
@@ -61,6 +56,4 @@ class User:
 
     @is_admin.setter
     def is_admin(self, admin_state: bool):
-        assert isinstance(admin_state, bool), 'Parameter type must be bool'
         self.__is_admin = admin_state
-
