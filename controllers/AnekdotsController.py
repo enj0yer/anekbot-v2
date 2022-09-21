@@ -19,4 +19,9 @@ class AnekdotsController(Connection):
         self._cursor.execute("update anekdots set on_review = (?) where id = (?)",
                              (on_review, anekdot.anekdot_id,))
 
+    def get_likes_amount(self, anekdot: Anekdot) -> int:
+        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?)", (anekdot.anekdot_id,))
 
+        return result[0]
+
+    def
