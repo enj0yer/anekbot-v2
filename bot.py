@@ -1,6 +1,4 @@
 import types
-import settings
-from classes import *
 
 import sqlite3
 from telebot import *

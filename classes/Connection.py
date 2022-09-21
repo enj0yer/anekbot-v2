@@ -1,5 +1,5 @@
 import sqlite3
-from settings import PATH
+from config.settings import PATH
 
 
 class Connection:
