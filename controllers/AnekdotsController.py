@@ -20,8 +20,6 @@ class AnekdotsController(Connection):
                              (on_review, anekdot.anekdot_id,))
 
     def get_likes_amount(self, anekdot: Anekdot) -> int:
-        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?)", (anekdot.anekdot_id,))
+        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?)", (anekdot.anekdot_id,)).fetchone()
 
         return result[0]
-
-    def
