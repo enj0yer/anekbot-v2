@@ -1,5 +1,6 @@
 from classes.Anekdot import Anekdot
 from classes.Connection import Connection
+from classes.User import User
 
 
 class AnekdotsController(Connection):
@@ -19,7 +20,30 @@ class AnekdotsController(Connection):
         self._cursor.execute("update anekdots set on_review = (?) where id = (?)",
                              (on_review, anekdot.anekdot_id,))
 
-    def get_likes_amount(self, anekdot: Anekdot) -> int:
-        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?)", (anekdot.anekdot_id,)).fetchone()
+    def get_amounts_of_anekdots(self, anekdot: Anekdot) -> int:
+        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?) and on_review = 0", (anekdot.anekdot_id,)).fetchone()
 
         return result[0]
+
+    def get_all_liked_anekdots(self, user: User) -> list[Anekdot]:
+        raw_result = self._cursor.execute("select id, user_id, data, on_review "
+                                          "from anekdots inner join likes l "
+                                          "on anekdots.id = l.anekdot_id and l.user_id = (?) where on_review = 0", (user.user_id,)).fetchall()
+
+        result = []
+
+        for raw_anekdot in raw_result:
+            result.append(Anekdot(anekdot_id=raw_anekdot[0], user_id=raw_anekdot[1], data=raw_anekdot[2], on_review=raw_anekdot[3]))
+
+        return result
+
+    def get_on_review_anekdots(self):
+        raw_result = self._cursor.execute("select id, user_id, data, on_review "
+                                          "from anekdots where on_review = 1 limit 10").fetchall()
+
+        result = []
+
+        for raw_anekdot in raw_result:
+            result.append(Anekdot(anekdot_id=raw_anekdot[0], user_id=raw_anekdot[1], data=raw_anekdot[2], on_review=raw_anekdot[3]))
+
+        return result
