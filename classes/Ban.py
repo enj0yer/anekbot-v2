@@ -2,12 +2,16 @@ from datetime import datetime, timedelta
 
 
 class Ban:
-    def __init__(self, ban_id: int = None, user_id: int = None, cause: str = None, ban_starts: datetime = None, ban_duration: int = None):
+    def __init__(self, ban_id: int = None, user_id: int = None, cause: str = None, ban_starts: datetime = None, ban_duration: int = None, ban_ends: datetime = None):
         self.__id = ban_id
         self.__user_id = user_id
         self.__cause = cause
         self.__ban_starts = ban_starts
-        self.__ban_ends = self.__calculate_unban_time(ban_starts, ban_duration)
+        self.__ban_ends = self.__calculate_unban_time(ban_starts, ban_duration) if ban_ends is None else ban_ends
+
+    @property
+    def id(self) -> int:
+        return self.__id
 
     @staticmethod
     def __calculate_unban_time(start_ban_time, ban_duration: int) -> datetime:
@@ -22,11 +26,11 @@ class Ban:
         return self.__cause
 
     @property
-    def start_ban_time(self):
+    def ban_starts(self):
         return self.__ban_starts
 
     @property
-    def end_ban_time(self) -> datetime:
+    def ban_ends(self) -> datetime:
         return self.__ban_ends
 
     @property
