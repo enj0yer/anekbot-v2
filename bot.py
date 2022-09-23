@@ -3,6 +3,7 @@ import types
 import sqlite3
 from telebot import *
 
+from classes.User import User
 
 bot = telebot.TeleBot
 
@@ -242,4 +243,4 @@ def admin_choice(call):
         deleteByAdmin(call.message)
 
 
-bot.polling(non_stop=True, interval=0)
+# bot.polling(non_stop=True, interval=0)
