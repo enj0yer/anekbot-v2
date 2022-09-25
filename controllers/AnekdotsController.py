@@ -21,8 +21,8 @@ class AnekdotsController(Connection):
                              (on_review, anekdot.id,))
         self._connection.commit()
 
-    def get_amounts_of_anekdots(self, anekdot: Anekdot) -> int:
-        result = self._cursor.execute("select count(id) from anekdots where user_id = (?) and on_review = 0", (anekdot.id,)).fetchone()
+    def get_amounts_of_anekdots(self, user: User) -> int:
+        result = self._cursor.execute("select count(id) from anekdots where user_id = (?) and on_review = 0", (user.id,)).fetchone()
 
         return result[0]
 

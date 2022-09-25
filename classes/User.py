@@ -46,14 +46,14 @@ class User:
         return self.__is_owner
 
     @is_owner.setter
-    def is_owner(self, owner_state) -> None:
+    def is_owner(self, state: bool) -> None:
         """NOT FOR USAGE"""
-        self.__is_owner = owner_state
+        self.__is_owner = state
 
     @property
     def is_admin(self) -> bool:
         return self.__is_admin
 
     @is_admin.setter
-    def is_admin(self, admin_state: bool):
-        self.__is_admin = admin_state
+    def is_admin(self, state: bool):
+        self.__is_admin = state
