@@ -2,9 +2,10 @@ from datetime import datetime, timedelta
 
 
 class Ban:
-    def __init__(self, ban_id: int = None, user_id: int = None, cause: str = None, ban_starts: datetime = None, ban_duration: int = None, ban_ends: datetime = None):
+    def __init__(self, ban_id: int = None, user_id: int = None, is_active: bool = True, cause: str = None, ban_starts: datetime = None, ban_duration: int = None, ban_ends: datetime = None):
         self.__id = ban_id
         self.__user_id = user_id
+        self.__is_active = is_active
         self.__cause = cause
         self.__ban_starts = ban_starts
         self.__ban_ends = self.__calculate_unban_time(ban_starts, ban_duration) if ban_ends is None else ban_ends
@@ -44,3 +45,10 @@ class Ban:
     def check_ban_state(self):
         return datetime.now() < self.__ban_ends
 
+    @property
+    def active(self) -> bool:
+        return self.__is_active
+
+    @active.setter
+    def active(self, state) -> None:
+        self.__is_active = state
