@@ -8,14 +8,14 @@ class Ban:
         self.__is_active = is_active
         self.__cause = cause
         self.__ban_starts = ban_starts
-        self.__ban_ends = self.__calculate_unban_time(ban_starts, ban_duration) if ban_ends is None else ban_ends
+        self.__ban_ends = self.calculate_unban_time(ban_starts, ban_duration) if ban_ends is None else ban_ends
 
     @property
     def id(self) -> int:
         return self.__id
 
     @staticmethod
-    def __calculate_unban_time(start_ban_time, ban_duration: int) -> datetime:
+    def calculate_unban_time(start_ban_time, ban_duration: int) -> datetime:
         return start_ban_time + timedelta(seconds=ban_duration)
 
     @property
@@ -40,10 +40,10 @@ class Ban:
 
     @ban_duration.setter
     def ban_duration(self, new_ban_duration) -> None:
-        self.__ban_ends = self.__calculate_unban_time(self.__ban_starts, new_ban_duration)
+        self.__ban_ends = self.calculate_unban_time(self.__ban_starts, new_ban_duration)
 
-    def check_ban_state(self):
-        return datetime.now() < self.__ban_ends
+    def check_ban_relevance(self) -> bool:
+        return (self.__ban_ends < self.__ban_starts or datetime.now() < self.__ban_ends) and self.active
 
     @property
     def active(self) -> bool:
