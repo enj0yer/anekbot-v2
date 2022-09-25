@@ -18,17 +18,18 @@ class AnekdotsController(Connection):
     def change_review_state(self, anekdot: Anekdot, on_review: bool) -> None:
         """ONLY IN DATABASE"""
         self._cursor.execute("update anekdots set on_review = (?) where id = (?)",
-                             (on_review, anekdot.anekdot_id,))
+                             (on_review, anekdot.id,))
+        self._connection.commit()
 
     def get_amounts_of_anekdots(self, anekdot: Anekdot) -> int:
-        result = self._cursor.execute("select count(id) as [amount] from anekdots where user_id = (?) and on_review = 0", (anekdot.anekdot_id,)).fetchone()
+        result = self._cursor.execute("select count(id) from anekdots where user_id = (?) and on_review = 0", (anekdot.id,)).fetchone()
 
         return result[0]
 
     def get_all_liked_anekdots(self, user: User) -> list[Anekdot]:
         raw_result = self._cursor.execute("select id, user_id, data, on_review "
                                           "from anekdots inner join likes l "
-                                          "on anekdots.id = l.anekdot_id and l.user_id = (?) where on_review = 0", (user.user_id,)).fetchall()
+                                          "on anekdots.id = l.anekdot_id and l.user_id = (?) where on_review = 0", (user.id,)).fetchall()
 
         result = []
 

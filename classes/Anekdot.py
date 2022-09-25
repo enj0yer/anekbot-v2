@@ -6,7 +6,7 @@ class Anekdot:
         self.__on_review = on_review
 
     @property
-    def anekdot_id(self) -> int:
+    def id(self) -> int:
         return self.__id
 
     @property
@@ -18,7 +18,7 @@ class Anekdot:
         return self.__data
 
     @property
-    def on_review(self)  -> bool:
+    def on_review(self) -> bool:
         return self.__on_review
 
     @on_review.setter
