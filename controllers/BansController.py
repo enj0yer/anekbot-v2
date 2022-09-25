@@ -38,7 +38,7 @@ class BansController(Connection):
         self._connection.commit()
 
     def disable_ban(self, ban: Ban) -> None:
-        self._cursor.execute("delete from bans where id = (?)", (ban.id,))
+        self._cursor.execute("update bans set is_active where id = (?)", (ban.id,))
         self._connection.commit()
 
     def disable_all_bans(self, user: User) -> None:
@@ -46,7 +46,17 @@ class BansController(Connection):
         self._connection.commit()
 
     def find(self, user: User) -> list[Ban]:
-        raw_result = self._cursor.execute("select id, user_id, cause, ban_starts, ban_ends, is_active from bans where user_id = (?) order by ban_starts, ban_ends").fetchall()
+        raw_result = self._cursor.execute("select id, user_id, cause, ban_starts, ban_ends, is_active from bans where user_id = (?) order by ban_starts, ban_ends", (user.id,)).fetchall()
+
+        result = []
+
+        for string in raw_result:
+            result.append(Ban(ban_id=string[0], user_id=string[1], cause=string[2], ban_starts=string[3], ban_ends=string[4], is_active=string[5]))
+
+        return result
+
+    def find_active(self, user: User) -> list[Ban]:
+        raw_result = self._cursor.execute("select id, user_id, cause, ban_starts, ban_ends, is_active from bans where user_id = (?) and is_active order by ban_starts, ban_ends", (user.id,)).fetchall()
 
         result = []
 
