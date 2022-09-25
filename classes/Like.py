@@ -5,7 +5,7 @@ class Like:
         self.__anekdot_id = anekdot_id
 
     @property
-    def like_id(self) -> int:
+    def id(self) -> int:
         return self.__like_id
 
     @property
@@ -14,5 +14,5 @@ class Like:
 
     @property
     def anekdot_id(self) -> int:
-        return self.like_id
+        return self.__anekdot_id
 

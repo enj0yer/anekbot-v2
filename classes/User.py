@@ -10,7 +10,7 @@ class User:
         self.__is_admin = is_admin
 
     @property
-    def user_id(self) -> int:
+    def id(self) -> int:
         return self.__id
 
     @property
