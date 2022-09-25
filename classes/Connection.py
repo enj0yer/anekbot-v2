@@ -9,4 +9,6 @@ class Connection:
         self._cursor = self._connection.cursor()
 
     def __del__(self):
+        self._cursor.close()
         self._connection.close()
+
