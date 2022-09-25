@@ -18,3 +18,6 @@ class LikesController(Connection):
         self._cursor.execute("delete from likes where user_id = (?) and anekdot_id = (?)", (user.id, anekdot.id,))
         self._connection.commit()
 
+    def count_likes(self, anekdot: Anekdot):
+        result = self._cursor.execute("select count(id) from likes where anekdot_id = (?)", (anekdot.id,)).fetchone()
+        return result[0]
