@@ -56,3 +56,6 @@ class UsersController(Connection):
         result = self._cursor.execute("select id, tg_id, username, first_name, last_name, is_owner, is_admin from users where tg_id = (?)", (tg_id,)).fetchone()
 
         return User(user_id=result[0], tg_id=result[1], username=result[2], first_name=result[3], last_name=result[4], is_owner=result[5], is_admin=result[6])
+
+
+
