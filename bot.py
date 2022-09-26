@@ -1,4 +1,3 @@
+from classes.User import User
 from controllers.BansController import BansController
-
-ctrl = BansController()
-ctrl.find()
+from controllers.UsersController import UsersController
