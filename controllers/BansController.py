@@ -18,11 +18,11 @@ class BansController(Connection):
 
     def __update(self, user: User, ban: Ban) -> None:
         self._cursor.execute("update users \
-                                      set user_id = iif((?) is not null, (?), null), \
-                                          cause = iif((?) is not null, (?), null), \
-                                          ban_starts = iif((?) is not null, (?), null), \
-                                          ban_ends = iif((?) is not null, (?), null), \
-                                          is_active = iif((?) is not null, (?), null), \
+                                      set user_id = iif((?) is not null, (?), user_id), \
+                                          cause = iif((?) is not null, (?), cause), \
+                                          ban_starts = iif((?) is not null, (?), ban_starts), \
+                                          ban_ends = iif((?) is not null, (?), ban_ends), \
+                                          is_active = iif((?) is not null, (?), is_active), \
                                       where id = (?)", (user.id, user.id,
                                                         ban.cause, ban.cause,
                                                         ban.ban_starts, ban.ban_starts,

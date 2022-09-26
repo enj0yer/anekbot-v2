@@ -32,12 +32,12 @@ class UsersController(Connection):
 
     def __update(self, user: User) -> None:
         self._cursor.execute("update users \
-                              set tg_id = iif((?) is not null, (?), null), \
-                                  username = iif((?) is not null, (?), null), \
-                                  first_name = iif((?) is not null, (?), null), \
-                                  last_name = iif((?) is not null, (?), null), \
-                                  is_owner = iif((?) is not null, (?), null), \
-                                  is_admin = iif((?) is not null, (?), null) \
+                              set tg_id = iif((?) is not null, (?), tg_id), \
+                                  username = iif((?) is not null, (?), username), \
+                                  first_name = iif((?) is not null, (?), first_name), \
+                                  last_name = iif((?) is not null, (?), last_name), \
+                                  is_owner = iif((?) is not null, (?), is_owner), \
+                                  is_admin = iif((?) is not null, (?), is_admin) \
                               where id = (?)", (user.tg_id, user.tg_id,
                                                 user.username, user.username,
                                                 user.first_name, user.first_name,
