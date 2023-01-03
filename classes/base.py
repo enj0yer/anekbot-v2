@@ -63,6 +63,12 @@ class Ban:
     def from_user(self, from_user: int):
         self.__from_user = from_user
 
+    def ban_starts_str(self) -> str:
+        return self.__ban_starts.strftime("%Y-%m-%d %H:%M:%S")
+
+    def ban_ends_str(self) -> str:
+        return self.__ban_ends.strftime("%Y-%m-%d %H:%M:%S")
+
 
 class Joke:
     def __init__(self, joke_id: int = None, user_id: int = None, data: str = None, on_review: bool = True):
