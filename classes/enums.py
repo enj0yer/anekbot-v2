@@ -7,9 +7,9 @@ class Direction(Enum):
 
 
 class Role(Enum):
-    OWNER = "owner",
-    ADMIN = "admin",
-    USER = "user"
+    OWNER = "OWNER",
+    ADMIN = "ADMIN",
+    USER = "USER"
 
     @staticmethod
     def role_from_string(string_role: str):
