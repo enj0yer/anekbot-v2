@@ -1,9 +1,7 @@
 import logging
 from aiogram import Bot, Dispatcher, executor, types
-from classes.User import User
-from controllers.BansController import BansController
-from controllers.UsersController import UsersController
-from controllers.JokesController import JokesController
+from classes.base import User
+from classes.controllers import BansController, UsersController, JokesController, LikesController
 from config.settings import TOKEN
 
 logging.basicConfig(level=logging.INFO)
@@ -25,9 +23,14 @@ async def welcome(message: types.Message):
 
 @db.message_handler(commands=['joke'])
 async def get(message: types.Message):
+    ban = UsersController.is_banned(tg_id=message.from_user.id)
+    if ban:
+        await message.answer(f'Вы были забанены {("модератором " + ban.from_user) if ban.from_user else ""} {("по причине " + "`" + ban.cause + "`") if ban.cause else ""}')
+        return
     controller = JokesController()
     random_joke = controller.get_random_joke()
     await message.answer(random_joke.data)
+    return
 
 
 @db.message_handler(commands=['admin'])
