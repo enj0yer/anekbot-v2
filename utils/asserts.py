@@ -30,3 +30,4 @@ class Asserts:
     @staticmethod
     def assert_bool_strict(var):
         assert isinstance(var, bool), 'Parameter type must be bool'
+        
