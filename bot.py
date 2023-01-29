@@ -1,7 +1,7 @@
 import logging
 from aiogram import Bot, Dispatcher, executor, types
 from classes.base import User
-from classes.controllers import BansController, UsersController, JokesController, LikesController
+from classes.controllers import UsersController, JokesController
 from config.settings import TOKEN
 from classes.enums import Role
 
@@ -44,10 +44,11 @@ async def admin(message: types.Message):
     pass
 
 
+@db.message_handler()
+async def other(message: types.Message):
+    await message.answer("Не знаю, как на это ответить, попробуйте эти команды:\n\n/start\n/joke")
+
+
 if __name__ == "__main__":
     executor.start_polling(db, skip_updates=True)
 
-
-@db.message_handler()
-async def other(message: types.Message):
-    await message.answer("Не знаю, как на это ответить, попробуйте эти команды:\n/start\n/joke")
