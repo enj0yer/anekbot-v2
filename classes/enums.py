@@ -30,4 +30,5 @@ class Role(Enum):
 class BanType(Enum):
     """Enum, which contains all ban types for users"""
     TEMPORARY = "TEMPORARY",
-    PERMANENT = "PERMANENT"
+    PERMANENT = "PERMANENT",
+    NONE = "NONE"

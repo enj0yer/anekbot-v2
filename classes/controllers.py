@@ -1,7 +1,38 @@
 import datetime
 
+from aiogram import types
+
+from bot.service import send_ban_info
 from classes.base import Ban, User, Joke
 from classes.connection import Connection
+from classes.enums import Role
+
+
+def __save_user_data(message: types.Message):
+    user_controller = UsersController()
+    user = user_controller.get_by_tg_id(message.from_user.id)
+    if not user:
+        user_controller.save(User(tg_id=message.from_user.id,
+                                  username=message.from_user.username,
+                                  first_name=message.from_user.first_name,
+                                  last_name=message.from_user.last_name,
+                                  role=Role.USER))
+    else:
+        user_controller.save(User(user_id=user.id,
+                                  username=message.from_user.username,
+                                  first_name=message.from_user.first_name,
+                                  last_name=message.from_user.last_name))
+
+
+def process_user(message: types.Message, save_changes: bool = False) -> bool:
+    if save_changes:
+        __save_user_data(message)
+
+    ban = UsersController.is_banned(User(tg_id=message.from_user.id))
+    if ban:
+        send_ban_info(message, ban)
+        return False
+    return True
 
 
 class BansController(Connection):
