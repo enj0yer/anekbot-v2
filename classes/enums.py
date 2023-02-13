@@ -26,6 +26,9 @@ class Role(Enum):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def with_admin_access():
+        return [Role.ADMIN, Role.OWNER]
 
 class BanType(Enum):
     """Enum, which contains all ban types for users"""
