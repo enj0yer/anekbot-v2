@@ -2,7 +2,6 @@ import datetime
 
 from aiogram import types
 
-from bot.service import send_ban_info
 from classes.base import Ban, User, Joke
 from classes.connection import Connection
 from classes.enums import Role
@@ -25,6 +24,7 @@ def __save_user_data(message: types.Message):
 
 
 def process_user(message: types.Message, save_changes: bool = False) -> bool:
+    from bot.service import send_ban_info
     if save_changes:
         __save_user_data(message)
 
@@ -233,13 +233,13 @@ class UsersController(Connection):
                              "values ((?), (?), (?), (?), (?))", (user.tg_id, user.username, user.first_name, user.last_name, user.role.name,))
         self._connection.commit()
 
-    def get_by_tg_id(self, tg_id: int) -> User:
+    def get_by_tg_id(self, tg_id: int) -> User | None:
         """Get user by telegram id"""
         result = self._cursor.execute("select id, tg_id, username, first_name, last_name, role from users where tg_id = (?)", (tg_id,)).fetchone()
 
         return result if not result else User(user_id=result[0], tg_id=result[1], username=result[2], first_name=result[3], last_name=result[4], role=result[5])
 
-    def get_by_id(self, user_id: int) -> User:
+    def get_by_id(self, user_id: int) -> User | None:
         """Get user by database id"""
         result = self._cursor.execute("select id, tg_id, username, first_name, last_name, role from users where id = (?)", (user_id,)).fetchone()
 
@@ -257,3 +257,14 @@ class UsersController(Connection):
         BansController().save(user, ban)
 
         return ban
+
+    def get_role(self, user_id) -> Role | None:
+        result = self._cursor.execute("select id, tg_id, username, first_name, last_name, role from users where id = (?)", (user_id,)).fetchone()
+
+        if not result:
+            return result
+        else:
+            user = User(user_id=result[0], tg_id=result[1], username=result[2], first_name=result[3], last_name=result[4], role=result[5])
+            return user.role
+
+
